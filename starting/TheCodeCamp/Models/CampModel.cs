@@ -12,8 +12,8 @@ namespace TheCodeCamp.Models
         
         public DateTime EventDate { get; set; } = DateTime.MinValue;
         public int Length { get; set; } = 1;
-
-        public string LocationVenueName { get; set; }
+        public ICollection<TalkModel> Talks { get; set; }
+        public string LocationVenue { get; set; }
         public string LocationAddress1 { get; set; }
         public string LocationAddress2 { get; set; }
         public string LocationAddress3 { get; set; }
@@ -21,6 +21,7 @@ namespace TheCodeCamp.Models
         public string LocationStateProvince { get; set; }
         public string LocationPostalCode { get; set; }
         public string LocationCountry { get; set; }
+        
 
     }
 }
