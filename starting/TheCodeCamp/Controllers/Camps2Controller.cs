@@ -13,7 +13,9 @@ namespace thecodecamp.controllers
 {
     [ApiVersion("2.0")]
     
-    [RoutePrefix("api/camps")]
+    //[RoutePrefix("api/camps")]
+    [RoutePrefix("api/v{version:apiVersion}/camps")] //UrlSegmentApiVersionReader will look for this
+    //url
     public class Camps2Controller : ApiController
     {
         private readonly ICampRepository _repository;
