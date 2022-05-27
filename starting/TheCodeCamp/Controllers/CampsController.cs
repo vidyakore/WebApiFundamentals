@@ -30,6 +30,7 @@ namespace thecodecamp.controllers
                 var result = await _repository.GetAllCampsAsync(includeTalks);
 
                 // Mapping 
+
                 var mappedResult = _mapper.Map<IEnumerable<CampModel>>(result);
 
                 return Ok(mappedResult);
@@ -131,6 +132,31 @@ namespace thecodecamp.controllers
                 return InternalServerError(ex);
             }
 
+        }
+        [Route("{moniker}")]
+        public async Task<IHttpActionResult> Delete(string moniker)
+        {
+            try
+            {
+                var camp = await _repository.GetCampAsync(moniker);
+                if (camp == null) return NotFound();
+
+                _repository.DeleteCamp(camp);
+
+                if(await _repository.SaveChangesAsync())
+                {
+                    return Ok();
+
+                }
+                else
+                {
+                    return InternalServerError();
+                }
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
     }
  }
