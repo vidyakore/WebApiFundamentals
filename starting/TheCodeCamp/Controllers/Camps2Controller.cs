@@ -11,15 +11,15 @@ using TheCodeCamp.Models;
 
 namespace thecodecamp.controllers
 {
-    [ApiVersion("1.0")]
-    [ApiVersion("1.1")]
+    [ApiVersion("2.0")]
+    
     [RoutePrefix("api/camps")]
-    public class CampsController : ApiController
+    public class Camps2Controller : ApiController
     {
         private readonly ICampRepository _repository;
         private readonly IMapper _mapper;
 
-        public CampsController(ICampRepository repository, IMapper mapper)
+        public Camps2Controller(ICampRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
@@ -44,8 +44,8 @@ namespace thecodecamp.controllers
                 return InternalServerError(ex);
             }
         }
-        [MapToApiVersion("1.0")]
-        [Route("{moniker}", Name = "GetCamp")]
+        
+        [Route("{moniker}", Name = "GetCamp20")]
         public async Task<IHttpActionResult> Get(string moniker, bool includeTalks = false)
         {
             try
@@ -53,7 +53,7 @@ namespace thecodecamp.controllers
                 var result = await _repository.GetCampAsync(moniker, includeTalks);
                 if (result == null) return NotFound();
 
-                return Ok(_mapper.Map<CampModel>(result));
+                return Ok(new { success = true, camp = _mapper.Map<CampModel>(result) });
             }
             catch (Exception ex)
             {
@@ -61,23 +61,7 @@ namespace thecodecamp.controllers
             }
         }
 
-        [MapToApiVersion("1.1")]
-        [Route("{moniker}", Name = "GetCamp11")]
-        public async Task<IHttpActionResult> Get(string moniker)
-        {
-            try
-            {
-                var result = await _repository.GetCampAsync(moniker, true);
-                if (result == null) return NotFound();
-
-                return Ok(_mapper.Map<CampModel>(result));
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
-        }
-
+        
         [Route("searchByDate/{eventDate:datetime}")]
         [HttpGet]
         public async Task<IHttpActionResult> SearchByEventDate(DateTime eventDate, bool includeTalks = false)
@@ -106,19 +90,19 @@ namespace thecodecamp.controllers
                 }
                 if (ModelState.IsValid)
                 {
-                    
+
                     var camp = _mapper.Map<Camp>(model);
 
                     _repository.AddCamp(camp);
-                    if(await _repository.SaveChangesAsync())
+                    if (await _repository.SaveChangesAsync())
                     {
                         var newModel = _mapper.Map<CampModel>(camp);
-                   
+
                         return CreatedAtRoute("GetCamp", new { moniker = newModel.Moniker }, camp);
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return InternalServerError(ex);
             }
@@ -128,12 +112,12 @@ namespace thecodecamp.controllers
 
         [Route("{moniker}")]
         [HttpPut]
-        public async Task<IHttpActionResult> Put(string moniker,CampModel model)
+        public async Task<IHttpActionResult> Put(string moniker, CampModel model)
         {
             try
             {
                 var camp = await _repository.GetCampAsync(moniker);
-                if(camp == null)
+                if (camp == null)
                 {
                     return NotFound();
                 }
@@ -147,7 +131,7 @@ namespace thecodecamp.controllers
                     return InternalServerError();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return InternalServerError(ex);
             }
@@ -163,7 +147,7 @@ namespace thecodecamp.controllers
 
                 _repository.DeleteCamp(camp);
 
-                if(await _repository.SaveChangesAsync())
+                if (await _repository.SaveChangesAsync())
                 {
                     return Ok();
 
@@ -179,7 +163,7 @@ namespace thecodecamp.controllers
             }
         }
     }
- }
+}
 
 
 

@@ -63,12 +63,12 @@ namespace TheCodeCamp.Data
           .Include(c => c.Talks.Select(t => t.Speaker));
       }
 
-      // Order It
-      query = query.OrderByDescending(c => c.EventDate)
-        .Where(c => c.EventDate == dateTime);
+            // Order It
+            query = query.OrderByDescending(c => c.EventDate)
+              .Where(c => c.EventDate == dateTime);
 
-      return await query.ToArrayAsync();
-    }
+            return await query.ToArrayAsync();
+        }
 
     public async Task<Camp[]> GetAllCampsAsync(bool includeTalks = false)
     {
